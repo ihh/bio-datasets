@@ -57,3 +57,6 @@ ln -sf ~/bio-datasets/data/pfam ~/project/pfam_data
 | pfam | ~4 MB-27K files | fetch/pfam/fetch.py | Pfam seed alignments |
 | treefam | ~16 GB | fetch/treefam/fetch.py | TreeFam gene families |
 | balibase | ~124 MB | fetch/balibase/fetch.py | BAliBASE alignment benchmark |
+| zoonomia | ~600 GB | fetch/zoonomia/fetch.py | Cactus 241-mammal HAL alignment |
+| tiberius | ~100-150 GB | fetch/tiberius/fetch.py | 37 mammalian genomes + RefSeq annotations |
+| annevo | ~100-150 GB+ | fetch/annevo/fetch.py | AnnEvo training (genomes + Cactus alignment) |
