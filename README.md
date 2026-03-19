@@ -14,6 +14,9 @@ data/           ← .gitignore'd, holds actual data
   pfam/         ← Pfam seed alignments (Stockholm)
   treefam/      ← TreeFam gene family alignments + trees
   balibase/     ← BAliBASE alignment benchmark
+  zoonomia/     ← Zoonomia Cactus 241-mammal HAL alignment (~600 GB)
+  tiberius/     ← Tiberius training genomes + annotations (37 mammals)
+  annevo/       ← AnnEvo training data (genomes + Cactus alignment)
 
 fetch/          ← parallel structure with download scripts
   common.py     ← shared utilities (idempotent download, symlink safety)
@@ -25,6 +28,9 @@ fetch/          ← parallel structure with download scripts
   pfam/fetch.py
   treefam/fetch.py
   balibase/fetch.py
+  zoonomia/fetch.py
+  tiberius/fetch.py
+  annevo/fetch.py
 ```
 
 ## Usage
