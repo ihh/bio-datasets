@@ -1,0 +1,1 @@
+../../fetch/ucsc/assembly/hg38/msa/multiz100way/fetch.py
