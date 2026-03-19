@@ -11,7 +11,9 @@ data/           ← .gitignore'd, holds actual data
   crw/          ← CRW curated rRNA alignments + BPSEQ structures
   gtrnadb/      ← tRNA sequences (via Rfam RF00005)
   ucsc/assembly/hg38/msa/multiz100way/  ← UCSC 100-way MAFs
-  pfam/         ← (placeholder)
+  pfam/         ← Pfam seed alignments (Stockholm)
+  treefam/      ← TreeFam gene family alignments + trees
+  balibase/     ← BAliBASE alignment benchmark
 
 fetch/          ← parallel structure with download scripts
   common.py     ← shared utilities (idempotent download, symlink safety)
@@ -20,6 +22,9 @@ fetch/          ← parallel structure with download scripts
   crw/fetch.py
   gtrnadb/fetch.py
   ucsc/assembly/hg38/msa/multiz100way/fetch.py
+  pfam/fetch.py
+  treefam/fetch.py
+  balibase/fetch.py
 ```
 
 ## Usage
@@ -41,3 +46,11 @@ ln -s ~/bio-datasets/data/rfam ~/my-project/rfam_data
 - Fetch scripts are **idempotent**: skip existing files
 - Fetch scripts **never delete symlinks** or existing data
 - Each script defaults to `data/<dataset>/` relative to repo root
+
+## Migration from ~/datasets/
+
+If data already exists in `~/datasets/`, move it into `data/` here:
+```bash
+mv ~/datasets/pfam ~/bio-datasets/data/pfam
+# Update symlinks in project repos to point to ~/bio-datasets/data/pfam
+```
