@@ -1,0 +1,11 @@
+# All data is fetched, not committed
+data/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# OS
+.DS_Store
+Thumbs.db
