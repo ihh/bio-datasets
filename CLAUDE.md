@@ -18,6 +18,51 @@ Real data lives in `data/` (gitignored). Fetch scripts live in `fetch/` (committ
 3. **Symlink convention**: Project repos symlink to `~/bio-datasets/data/<dataset>`,
    not to `~/datasets/` (legacy) or absolute paths.
 
+4. **Override convention**: The bio-datasets location (`~/bio-datasets` by default) is
+   overridable via `BIO_DATASETS_HOME` env var or `--bio-datasets DIR` CLI flag.
+   Every project script that uses bio-datasets must support both overrides.
+
+## Migrating other repos' data pipelines
+
+When a project repo has its own data-fetching code (download scripts, crawlers,
+`--fetch` modes), migrate it to prefer bio-datasets:
+
+### Process (confirm with user before starting each phase)
+
+**Phase 1: Plan** — Identify the repo's data-fetching entry points and where data
+currently lives. Confirm the plan with the user before writing any code.
+
+**Phase 2: Execute** — After user approval:
+
+1. Create `fetch/<dataset>/fetch.py` here if it doesn't exist
+2. Add a `bio_datasets.py` utility to the project repo (or copy the pattern from
+   `tkf-mixdom/python/tkfmixdom/jax/util/bio_datasets.py`) that:
+   - Auto-detects `~/bio-datasets` (or `$BIO_DATASETS_HOME`)
+   - Falls back to local directory when bio-datasets is absent
+   - Creates symlinks from the project's local data dir to bio-datasets
+   - Supports `--bio-datasets DIR` CLI override
+3. Wire the project's fetch/download scripts to use `resolve_data_dir()`
+4. Wire the project's training/analysis scripts to use `resolve_data_dir()`
+5. Test: verify scripts work both with and without bio-datasets present
+
+### Reference implementation
+
+See `tkf-mixdom` for the canonical example:
+- `python/tkfmixdom/jax/util/bio_datasets.py` — utility module
+- `train_pfam.py` — uses `resolve_data_dir("pfam", "pfam/")` + `ensure_symlinks()`
+- `maraschino.py fetch` — uses `resolve_data_dir("pfam", args.out_dir)`
+
+Key API:
+```python
+from tkfmixdom.jax.util.bio_datasets import resolve_data_dir, ensure_symlinks
+
+# Auto-detects ~/bio-datasets, falls back to local
+data_dir = resolve_data_dir("pfam", local_fallback="pfam/")
+
+# For mixed dirs (data + checkpoints), create per-file symlinks
+ensure_symlinks(data_dir, Path("pfam/"), pattern="*.sto")
+```
+
 ## Adding a new dataset
 
 1. Create `fetch/<dataset>/fetch.py` following existing examples (rfam, pfam, etc.)
