@@ -15,11 +15,9 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from common import default_outdir, safe_outdir, safe_download, log
 
-# TreeFam FTP (archived)
-BASE_URL = "http://www.treefam.org/static/download/"
-FILES = [
-    "TreeFam9.tar.gz",
-]
+# TreeFam download URL
+BASE_URL = "https://www.treefam.org/static/download/"
+FAMILY_DATA = "treefam_family_data.tar.gz"
 
 
 def main():
@@ -29,11 +27,18 @@ def main():
 
     outdir = safe_outdir(args.outdir)
 
-    for fname in FILES:
-        safe_download(BASE_URL + fname, outdir / fname, min_size=1000)
+    safe_download(BASE_URL + FAMILY_DATA, outdir / FAMILY_DATA, min_size=1000)
 
-    log.info("TreeFam: download complete. Extract with: tar xzf %s/TreeFam9.tar.gz -C %s/",
-             outdir, outdir)
+    # Extract
+    import subprocess
+    tarball = outdir / FAMILY_DATA
+    if not (outdir / "treefam_family_data").exists():
+        log.info("Extracting %s...", tarball)
+        subprocess.run(["tar", "xzf", str(tarball), "-C", str(outdir)], check=True)
+
+    log.info("TreeFam: %s families available in %s/treefam_family_data/",
+             len(list((outdir / "treefam_family_data").glob("*.aa.fasta"))),
+             outdir)
 
 
 if __name__ == "__main__":
